@@ -11,22 +11,30 @@
 ## Nome do grupo
 
 ## 👨‍🎓 Integrantes: 
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do integrante 1</a>
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do integrante 2</a>
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do integrante 3</a> 
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do integrante 4</a> 
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do integrante 5</a>
+- <a href="https://www.linkedin.com/company/inova-fusca">RM559784@fiap.com.br - Alex Lima </a>
+- <a href="https://www.linkedin.com/company/inova-fusca">RM560518@fiap.com.br - Bruno Henrique Nielsen Conter</a>
+- <a href="https://www.linkedin.com/company/inova-fusca">RM560479@fiap.com.br - Fabio Santos Cardoso</a> 
+- <a href="https://www.linkedin.com/company/inova-fusca">RM559546@fiap.com.br - Johnatan Sousa Macedo Loriano</a> 
+- <a href="https://www.linkedin.com/company/inova-fusca">RM560683@fiap.com.br - Matheus Augusto Rodrigues Maia</a>
 
 ## 👩‍🏫 Professores:
 ### Tutor(a) 
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do Tutor</a>
+- <a href="https://www.linkedin.com/company/inova-fusca">Lucas Gomes Moreira</a>
 ### Coordenador(a)
-- <a href="https://www.linkedin.com/company/inova-fusca">Nome do Coordenador</a>
+- <a href="https://www.linkedin.com/company/inova-fusca">André Godoi Chiovato</a>
 
 
 ## 📜 Descrição
 
-*Descreva seu projeto com base no texto do PBL (até 600 palavras)*
+O sistema realiza o monitoramento de parâmetros do solo através de sensores conectados a um ESP32, controlando automaticamente a irrigação com base nas leituras. Os dados são armazenados em um banco de dados SQL para análise histórica.
+Funcionalidades Principais
+
+- Monitoramento de umidade do solo (DHT22)
+- Simulação de níveis de fósforo e potássio (botões)
+- Medição de pH simulada (sensor LDR)
+- Controle automatizado de irrigação (relé)
+- Armazenamento de dados em banco SQL
+- Operações CRUD para gestão dos dados
 
 
 ## 📁 Estrutura de pastas
@@ -54,16 +62,8 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🗃 Histórico de lançamentos
 
-* 0.5.0 - XX/XX/2024
-    * 
-* 0.4.0 - XX/XX/2024
-    * 
-* 0.3.0 - XX/XX/2024
-    * 
-* 0.2.0 - XX/XX/2024
-    * 
-* 0.1.0 - XX/XX/2024
-    *
+* 0.5.0 - 12/11/2024
+
 
 ## 📋 Licença
 
