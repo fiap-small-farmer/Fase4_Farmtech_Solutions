@@ -11,17 +11,17 @@
 ## Nome do grupo
 
 ## 👨‍🎓 Integrantes: 
-- <a href="https://www.linkedin.com/company/inova-fusca">RM559784@fiap.com.br - Alex Lima </a>
-- <a href="https://www.linkedin.com/company/inova-fusca">RM560518@fiap.com.br - Bruno Henrique Nielsen Conter</a>
-- <a href="https://www.linkedin.com/company/inova-fusca">RM560479@fiap.com.br - Fabio Santos Cardoso</a> 
-- <a href="https://www.linkedin.com/company/inova-fusca">RM559546@fiap.com.br - Johnatan Sousa Macedo Loriano</a> 
-- <a href="https://www.linkedin.com/company/inova-fusca">RM560683@fiap.com.br - Matheus Augusto Rodrigues Maia</a>
+- <a href="https://www.linkedin.com/in/a1exlima/">RM559784@fiap.com.br - Alex da Silva Lima </a>
+- <a href="https://www.linkedin.com/in/johnatanloriano/">RM559546@fiap.com.br - Johnatan Sousa Macedo Loriano</a>
+- <a href="https://www.linkedin.com/in/matheus-maia-655bb1250/">RM560683@fiap.com.br - Matheus Augusto Rodrigues Maia</a>
+- <a href="https://www.linkedin.com/in/brunoconter/">RM560518@fiap.com.br - Bruno Henrique Nielsen Conter</a>
+- <a href="https://www.linkedin.com/in/fabiosantoscardoso/">RM560479@fiap.com.br - Fabio Santos Cardoso</a>
 
 ## 👩‍🏫 Professores:
 ### Tutor(a) 
-- <a href="https://www.linkedin.com/company/inova-fusca">Lucas Gomes Moreira</a>
+- <a href="https://www.linkedin.com/in/lucas-gomes-moreira-15a8452a/">Lucas Gomes Moreira</a>
 ### Coordenador(a)
-- <a href="https://www.linkedin.com/company/inova-fusca">André Godoi Chiovato</a>
+- <a href="https://www.linkedin.com/in/profandregodoi/">André Godoi</a>
 
 
 ## 📜 Descrição
@@ -35,6 +35,12 @@ Funcionalidades Principais
 - Controle automatizado de irrigação (relé)
 - Armazenamento de dados em banco SQL
 - Operações CRUD para gestão dos dados
+
+## Diagrama do Circuito Eletronico
+
+<p align="center">
+<a href= "https://www.fiap.com.br/"><img src="document/circuito_eletronico.png" alt="Circuito eletronico do projeto elaborado no WOKWI" border="0" width=80% height=80%></a>
+</p>
 
 
 ## 📁 Estrutura de pastas
