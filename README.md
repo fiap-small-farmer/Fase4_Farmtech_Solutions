@@ -39,7 +39,7 @@ Funcionalidades Principais
 ## Diagrama do Circuito Eletronico
 
 <p align="center">
-<a href= "https://www.fiap.com.br/"><img src="document/circuito_eletronico.png" alt="Circuito eletronico do projeto elaborado no WOKWI" border="0" width=80% height=80%></a>
+<a href= "https://www.fiap.com.br/"><img src="document/diagramas/circuito_eletronico.png" alt="Circuito eletronico do projeto elaborado no WOKWI" border="0" width=80% height=80%></a>
 </p>
 
 
