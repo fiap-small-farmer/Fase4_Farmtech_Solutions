@@ -50,7 +50,7 @@ https://wokwi.com/projects/414301079540361217
 Monitor Serial mostrando o acionamento e comunicação dos dados de leitura e timestamp
 
 <p align="center">
-<a href= "https://www.fiap.com.br/"><img src="document/assets/monitor_serial.png" alt="Monitor serial apresentando o acionamento do sistema de irrigação e comunicação com o banco de dados" border="0" width=80% height=80%></a>
+<a href= "https://www.fiap.com.br/"><img src="/assets/monitor_serial.png" alt="Monitor serial apresentando o acionamento do sistema de irrigação e comunicação com o banco de dados" border="0" width=80% height=80%></a>
 </p>
 
 ## Funcionamento do Equipamento
