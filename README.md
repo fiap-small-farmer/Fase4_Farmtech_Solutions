@@ -45,6 +45,14 @@ https://wokwi.com/projects/414301079540361217
 <a href= "https://www.fiap.com.br/"><img src="document/diagramas/circuito_eletronico.png" alt="Circuito eletronico do projeto elaborado no WOKWI" border="0" width=80% height=80%></a>
 </p>
 
+## Monitor Serial
+
+Monitor Serial mostrando o acionamento e comunicação dos dados de leitura e timestamp
+
+<p align="center">
+<a href= "https://www.fiap.com.br/"><img src="document/assets/monitor_serial.png" alt="Monitor serial apresentando o acionamento do sistema de irrigação e comunicação com o banco de dados" border="0" width=80% height=80%></a>
+</p>
+
 ## Funcionamento do Equipamento
 
 Este projeto visa a implementação de um sistema de irrigação inteligente e automatizado que monitora as condições do solo em tempo real e ajusta a irrigação conforme a necessidade. Utilizando um ESP32 e sensores simulados na plataforma Wokwi, o sistema capta informações cruciais sobre a qualidade do solo, executando o controle automatizado da irrigação.
