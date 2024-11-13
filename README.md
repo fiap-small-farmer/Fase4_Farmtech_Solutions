@@ -123,7 +123,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
   - [CRUD.py](src/Python/CRUD.py)
   
 - **Link para o Video no YouTube**: Link para o vídeo
-	- [link para o video.txt](document/youtube/link para o video.txt)
+	- [link_para_o_video.txt](document/youtube/link_para_o_video.txt)
   
 ## 📺 **Link para o vídeo no YouTube**
 
