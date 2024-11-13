@@ -121,6 +121,13 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
   
 - **Código Python (CRUD)**: Código responsável por alimentar o banco SQL.
   - [CRUD.py](src/Python/CRUD.py)
+  
+- **Link para o Video no YouTube**: Link para o vídeo
+	- [link para o video.txt](document/youtube/link para o video.txt)
+  
+## 📺 **Link para o vídeo no YouTube**
+
+- [Assistir ao vídeo do projeto no YouTube](https://www.youtube.com/watch?v=bDgtLsDA9ik)
 
 
 ## 🔧 Como executar o código
