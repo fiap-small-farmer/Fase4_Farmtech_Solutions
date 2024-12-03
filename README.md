@@ -6,7 +6,7 @@
 
 <br>
 
-# ATIVIDADE - Cap 1 - Construindo uma máquina agrícola
+# ATIVIDADE - Cap 1 - Automação e inteligência na FarmTech Solutions
 
 ## Nome do grupo
 
