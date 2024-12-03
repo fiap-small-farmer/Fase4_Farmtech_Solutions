@@ -4,6 +4,7 @@
 #include <ArduinoJson.h>
 #include <WiFiUdp.h>
 #include <NTPClient.h>
+#include <LiquidCrystal_I2C.h>
 
 struct DateTime {
   char date[11]; // 1 - SUBSTITUÍ STRING POR CHAR[] PARA ECONOMIZAR MEMÓRIA.
@@ -28,12 +29,16 @@ const uint16_t mqtt_port = 1883; // 2 - USANDO UINT16_T PARA ECONOMIZAR MEMÓRIA
 #define DHTPIN 23
 #define DHTTYPE DHT22
 #define LDR_PIN 34
-#define BTN_PHOSPHORUS 22
-#define BTN_POTASSIUM 21
+#define BTN_PHOSPHORUS 5
+#define BTN_POTASSIUM 17
 #define RELAY_PIN 19
 #define LED_RED 18
 
+// Inicialização do objeto para o sensor DHT
 DHT dht(DHTPIN, DHTTYPE);
+
+// Inicialização do objeto LCD
+LiquidCrystal_I2C LCD = LiquidCrystal_I2C(0x27, 16, 2);
 
 uint16_t moistureThreshold = 600; // 3 - REPRESENTANDO UMIDADE COMO INTEIRO (600 = 60.0%).
 uint16_t phMin = 60; // 4 - pH REPRESENTADO COMO INTEIRO (6.0 -> 60).
@@ -46,11 +51,23 @@ uint8_t irrigation = 0;
 WiFiUDP udp;
 NTPClient timeClient(udp, "pool.ntp.org", 0, 3600 * 24);
 
+// Impressão dados no display LCD
+void displayLCD(String text, String text1){
+  LCD.setCursor(0, 0);
+  LCD.println(text);
+
+  LCD.setCursor(0, 1);
+  LCD.println(text1);
+}
+
 // Função para conectar à rede Wi-Fi
 void setup_wifi() {
   Serial.println();
-  Serial.print("Conectando a ");
+  
+  Serial.print("Conectando na rede WiFi: ");
   Serial.println(ssid);
+  
+  displayLCD("Conectando WiFi", ssid);
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -62,22 +79,46 @@ void setup_wifi() {
 
   Serial.println("\nWiFi conectado");
   Serial.print("Endereço IP: ");
-  Serial.println(WiFi.localIP());
+
+  // Correção: converter o IP para String
+  IPAddress ip_WiFi = WiFi.localIP(); // Endereço IP
+  String ipString = ip_WiFi.toString(); // Converter para String
+
+  Serial.println(ipString);
+
+  LCD.clear();
+  displayLCD("WiFi conectado", ipString);
+  delay(1500);
 }
 
 // Função para conectar ao servidor MQTT
 void reconnect() {
+
   while (!client.connected()) {
-    Serial.print("Tentando conectar ao MQTT...");
+    Serial.println("Tentando conectar ao MQTT...");
+
+    LCD.clear();
+    displayLCD("Conectando...", "MQTT Server");
+    delay(1500);
+
     char clientId[25];
     snprintf(clientId, sizeof(clientId), "ESP32Client-%04X", random(0xffff)); // 6 - USANDO SNPRINTF PARA SEGURANÇA.
 
     if (client.connect(clientId)) {
       Serial.println("MQTT conectado");
+
+      LCD.clear();
+      displayLCD("MQTT Server", "Conectado");
+      delay(1500);
+
       client.subscribe("inTopic");
     } else {
       Serial.print("Falha, código de retorno=");
       Serial.print(client.state());
+
+      LCD.clear();
+      displayLCD("MQTT Server", "Não conectado");
+
       Serial.println(". Tentando novamente em 5 segundos...");
       delay(5000);
     }
@@ -156,7 +197,15 @@ void send_mqtt_data(uint16_t humidity, uint16_t phValue, const char* date, const
   client.publish("farmTechSolutions", msg);
 }
 
+// Função para configurar o display LCD
+void setupDisplayLCD(){
+  LCD.init();
+  LCD.backlight();
+}
+
+
 void setup() {
+  setupDisplayLCD(); // Inicializa o Display LCD
   Serial.begin(115200);
   setup_wifi(); // Conecta-se à rede Wi-Fi
   client.setServer(mqtt_server, mqtt_port); // Configura o servidor MQTT
@@ -172,7 +221,7 @@ void loop() {
   client.loop(); // Mantém a comunicação com o broker MQTT
 
   unsigned long now = millis();
-  if (now - lastMsg > 2000) {
+  if (now - lastMsg > 1500) {
     lastMsg = now;
 
     uint16_t humidity, phValue;
@@ -201,5 +250,53 @@ void loop() {
     Serial.println(currentTime.time);
 
     send_mqtt_data(humidity, phValue, currentTime.date, currentTime.time); // Envia os dados via MQTT
+
+    static int flag_Display = 0; // Declaração fora do switch
+
+    // Converte os valores para String para exibição
+    String h = String(humidity / 10.0);
+    String ph = String(phValue / 10.0);
+
+
+    // Alterna o conteúdo do display a cada iteração
+    switch (flag_Display) {
+      case 0:
+        LCD.clear();
+        displayLCD("Humidade: ", h);
+        break;
+
+      case 1:
+        LCD.clear();
+        displayLCD("pH (simulado): ", ph);
+        break;
+
+      case 2:
+        LCD.clear();
+        displayLCD("Fosforo: ", phosphorusDetected ? "Ativado" : "Desativado");
+        break;
+
+      case 3:
+        LCD.clear();
+        displayLCD("Potassio: ", potassiumDetected ? "Ativado" : "Desativado");
+        break;
+
+      case 4:
+        LCD.clear();
+        displayLCD("Irrigacao: ", irrigation ? "Ativado" : "Desativado");
+        break;
+
+      case 5:
+        LCD.clear();
+        displayLCD(currentTime.time, currentTime.date);
+        break;
+    }
+
+    // Incrementa flag_Display em 1
+    flag_Display = flag_Display + 1;
+
+    // Se flag_Display for 6, reinicia para 0
+    if (flag_Display >= 6) {
+      flag_Display = 0;
+    }
   }
 }
