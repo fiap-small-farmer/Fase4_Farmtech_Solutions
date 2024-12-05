@@ -1,13 +1,14 @@
 # FIAP - Faculdade de Informática e Administração Paulista
 
 <p align="center">
-<a href= "https://www.fiap.com.br/"><img src="assets/logo-fiap.png" alt="FIAP - Faculdade de Informática e Admnistração Paulista" border="0" width=40% height=40%></a>
+<a href= "https://www.fiap.com.br/"><img src="public/logo-fiap.png" alt="FIAP - Faculdade de Informática e Admnistração Paulista" border="0" width=40% height=40%></a>
 </p>
 
 <br>
 
-# ATIVIDADE - Cap 1 - Automação e inteligência na FarmTech Solutions
-
+### FarmTech Solutions Versão atualizada
+### Cap 1 - Automação e inteligência na FarmTech Solutions
+---
 ## Nome do grupo
 
 ## 👨‍🎓 Integrantes: 
@@ -38,19 +39,28 @@ Funcionalidades Principais
 
 ## Diagrama do Circuito Eletronico
 
-Link para o diagrama e código no Wokwi
-https://wokwi.com/projects/414301079540361217
-
+#### Link para o diagrama e código no Wokwi https://wokwi.com/projects/414301079540361217
 <p align="center">
-<a href= "https://www.fiap.com.br/"><img src="document/diagramas/circuito_eletronico.png" alt="Circuito eletronico do projeto elaborado no WOKWI" border="0" width=80% height=80%></a>
+<a href= "https://wokwi.com/projects/414301079540361217"><img src="public/circuito_eletronico.png" alt="Circuito eletronico do projeto elaborado no WOKWI" border="0" width=80% height=80%></a>
+</p>
+
+#### Link para o diagrama, versão atualizada: https://wokwi.com/projects/414443493615587329
+<p align="center">
+<a href= "https://wokwi.com/projects/414443493615587329"><img src="public/circuito_eletronico_v2.0.png" alt="Circuito eletronico do projeto elaborado no WOKWI V2.0" border="0" width=80% height=80%></a>
 </p>
 
 ## Monitor Serial
 
-Monitor Serial mostrando o acionamento e comunicação dos dados de leitura e timestamp
+Monitor Serial mostrando o acionamento e comunicação dos dados de leitura e timestamp.
 
 <p align="center">
-<a href= "https://www.fiap.com.br/"><img src="/assets/monitor_serial.png" alt="Monitor serial apresentando o acionamento do sistema de irrigação e comunicação com o banco de dados" border="0" width=80% height=80%></a>
+<a href= ""><img src="public/monitor_serial.png" alt="Monitor serial apresentando o acionamento do sistema de irrigação e comunicação com o banco de dados" border="0" width=80% height=80%></a>
+</p>
+
+Monitor Serial após as atualizações para envio dos dados via MQTT.
+
+<p align="center">
+<a href= ""><img src="public/monitor_serial_v2.0.png" alt="Monitor serial atualizado" border="0" width=80% height=80%></a>
 </p>
 
 ## Funcionamento do Equipamento
