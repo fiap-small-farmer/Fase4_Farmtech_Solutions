@@ -104,7 +104,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
   - [circuito_eletronico.png](public/circuito_eletronico_v2.0.png)
 
 - **Projeto Wokwi**: Link para o projeto no Wokwi.
-  - [projeto_wokwi.md](docs/link_simulador.txt)
+  - [projeto_wokwi.md](https://wokwi.com/projects/414443493615587329)
   
 - **Código Arduino**: Código desenvolvido para o ESP32.
   - [sketch.ino](/src//sketch/sketch.ino)
