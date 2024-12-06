@@ -28,14 +28,27 @@
 ## 📜 Descrição
 
 O sistema realiza o monitoramento de parâmetros do solo através de sensores conectados a um ESP32, controlando automaticamente a irrigação com base nas leituras. Os dados são armazenados em um banco de dados SQL para análise histórica.
-Funcionalidades Principais
 
-- Monitoramento de umidade do solo (DHT22)
-- Simulação de níveis de fósforo e potássio (botões)
-- Medição de pH simulada (sensor LDR)
-- Controle automatizado de irrigação (relé)
-- Armazenamento de dados em banco SQL
-- Operações CRUD para gestão dos dados
+### Funcionalidades Principais:
+
+- Monitoramento de umidade do solo (DHT22): Mede a umidade do solo para determinar quando a irrigação é necessária.
+- Simulação de níveis de fósforo e potássio (botões): Utiliza botões para simular os níveis de nutrientes no solo.
+- Medição de pH simulada (sensor LDR): Emprega um sensor LDR para simular a medição de pH do solo.
+- Controle automatizado de irrigação (relé): Ativa o sistema de irrigação automaticamente com base nas leituras dos sensores.
+- Armazenamento de dados em banco SQL: Guarda as leituras dos sensores em um banco de dados SQL para análises futuras.
+- Operações CRUD para gestão dos dados: Permite criar, ler, atualizar e deletar dados no banco de dados.
+
+### Atualizações Implementadas
+
+- Incorporação do Scikit-learn: A biblioteca Scikit-learn foi integrada ao sistema de irrigação automatizado para aumentar sua inteligência. Utilizamos o Scikit-learn para desenvolver um modelo preditivo que analisa os dados históricos de umidade e nutrientes do solo. Com isso, o sistema pode prever a necessidade de irrigação em horários específicos do dia, otimizando o uso da água e garantindo que as plantas recebam a quantidade ideal de irrigação. Esta abordagem permite uma gestão mais eficiente dos recursos hídricos e melhora a saúde geral das plantas.
+
+- Implementação do Streamlit: Foi implementado o Streamlit para aprimorar o dashboard do projeto. O Streamlit fornece uma interface interativa onde os dados do sistema de irrigação podem ser visualizados em tempo real. Gráficos dinâmicos mostram a variação da umidade do solo e os níveis de nutrientes, enquanto os insights gerados pelo modelo de Machine Learning ajudam na tomada de decisões informadas. Esta visualização facilita o monitoramento e a análise dos dados, permitindo ajustes rápidos e precisos no sistema de irrigação.
+
+- Adição do Display LCD no Wokwi: Um display LCD foi conectado ao ESP32 no Wokwi, utilizando o barramento I2C. O display LCD exibe em tempo real as principais métricas do sistema, como a umidade do solo, níveis de nutrientes e o status da irrigação. Isso permite um monitoramento imediato das condições do solo diretamente no dispositivo físico, aumentando a transparência e a eficiência operacional do sistema. Este recurso é crucial para exibir informações críticas sem a necessidade de um computador ou dispositivo adicional.
+
+- Monitoramento com Serial Plotter: Implementação do uso do Serial Plotter para monitorar variáveis do projeto. O Serial Plotter é usado para monitorar a umidade do solo em tempo real, proporcionando uma análise visual das mudanças nas leituras dos sensores. Isso auxilia na identificação rápida de padrões e anomalias no comportamento do sistema, permitindo intervenções mais rápidas e eficazes. O gráfico gerado pelo Serial Plotter facilita a interpretação dos dados de forma visual.
+
+- Otimização de Memória no ESP32: Revisão e otimização do uso de variáveis no código C/C++ do ESP32. Foram realizadas otimizações no uso de tipos de dados inteiros, floats e chars para economizar memória e garantir que o sistema opere de maneira mais eficiente. Cada modificação foi comentada no código para justificar as escolhas de otimização. Isso resulta em um sistema que utiliza os recursos do ESP32 de forma mais eficaz, melhorando o desempenho geral e a estabilidade do projeto.
 
 ## Diagrama do Circuito Eletronico
 
@@ -65,151 +78,50 @@ Monitor Serial após as atualizações para envio dos dados via MQTT.
 
 ## Funcionamento do Equipamento
 
-Este projeto visa a implementação de um sistema de irrigação inteligente e automatizado que monitora as condições do solo em tempo real e ajusta a irrigação conforme a necessidade. Utilizando um ESP32 e sensores simulados na plataforma Wokwi, o sistema capta informações cruciais sobre a qualidade do solo, executando o controle automatizado da irrigação.
-
-#### Componentes Principais
-
-1. **Microcontrolador ESP32**:
-   - Atua como núcleo de controle do sistema, recebendo dados de sensores e acionando a irrigação conforme parâmetros definidos. Também envia dados para armazenamento e consulta posterior no banco de dados SQL.
-
-2. **Sensores Simulados**:
-   - **Sensor de Umidade (DHT22)**: Mede a umidade do solo em percentual. Quando a umidade cai abaixo de um limite (ex.: 60%), a irrigação é acionada.
-   - **Sensor de pH (LDR - Resistor Dependente de Luz)**: Simula o nível de pH variando de 0 a 14 (representando a faixa de pH). Este sensor permite que a irrigação seja ajustada com base no pH.
-   - **Sensor de Fósforo (Botão)** e **Sensor de Potássio (Botão)**: Simulam os sensores de nutrientes em um nível binário (ativo/inativo). A irrigação é ativada apenas quando pelo menos um dos nutrientes está em nível "ativo".
-
-3. **Atuador de Irrigação (Relé)**:
-   - Representa a bomba de água. Quando a irrigação é ativada, o relé liga a bomba e permite que a água flua. Seu status é exibido por um LED de acionamento do relé.
-
-#### Lógica de Funcionamento
-
-1. **Leitura dos Sensores**:
-   - A cada ciclo, o sistema lê a umidade (DHT22), o pH (LDR) e o status dos botões de fósforo e potássio.
-   - Esses dados são exibidos no Monitor Serial e armazenados para análise.
-
-2. **Decisão de Irrigação**:
-   - A bomba d’água é ativada somente quando:
-     - A umidade está abaixo do limite (ex.: 60%);
-     - O nível de pH está entre os valores mínimo e máximo definidos (ex.: entre 6 e 8);
-     - Pelo menos um dos nutrientes (representados pelos botões de fósforo ou potássio) está em estado ativo.
-   - Se todas as condições são atendidas, o sistema aciona o relé, ligando a bomba. Caso contrário, o relé permanece desligado.
-
-3. **Envio e Armazenamento dos Dados**:
-   - Dados do monitor serial são transferidos para um banco de dados SQL por meio de operações CRUD, em um sistema Python, onde podem ser armazenados, visualizados e analisados.
-
-4. **Consulta e Monitoramento via Python**:
-   - O sistema de consulta em Python permite visualizar o histórico de dados coletados, possibilitando a análise de padrões de umidade, pH e status dos nutrientes.
-   - O código Python integrado ao banco de dados registra o histórico de acionamento da irrigação (quando o relé ligou ou desligou), criando uma base de dados para análise futura e tomada de decisão mais precisa.
-
-#### Aplicação do Projeto
-
-Este sistema de irrigação inteligente é projetado para otimizar o uso da água, atendendo as necessidades agrícolas com maior precisão e eficiência. Em uma aplicação real, essa abordagem ajudaria a reduzir desperdícios e aumentar a produtividade agrícola ao monitorar continuamente as condições do solo e agir em tempo real para ajustar a irrigação.
-
-
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
-- <b>.github</b>: Nesta pasta ficarão os arquivos de configuração específicos do GitHub que ajudam a gerenciar e automatizar processos no repositório.
+- <b>docs</b>: Contém documentos relacionados ao projeto, incluindo o diagrama do circuito eletrônico, informações com dados das atualizações do projeto, relatório principal que descreve detalhadamente o projeto e suas funcionalidades e links de apresentação e simulação.
 
-- <b>assets</b>: aqui estão os arquivos relacionados a elementos não-estruturados deste repositório, como imagens.
+- <b>libraries</b>: Armazena as bibliotecas utilizadas no sketch do esp32 para o funcionamento correto de todas as funcionalidades.
 
-- <b>config</b>: Posicione aqui arquivos de configuração que são usados para definir parâmetros e ajustes do projeto.
+- <b>public</b>: Reúne as imagens usadas no arquivo readme.md para apresentar o projeto no GitHub.
 
-- <b>document</b>: aqui estão todos os documentos do projeto que as atividades poderão pedir. Na subpasta "other", adicione documentos complementares e menos importantes.
+- <b>src</b>: Contém o sketch (código em C++ desenvolvido para o microcontrolador ESP32) e o arquivo JSON do diagrama para execução no simulador Wokwi.
 
-- <b>scripts</b>: Posicione aqui scripts auxiliares para tarefas específicas do seu projeto. Exemplo: deploy, migrações de banco de dados, backups.
+- <b>tests</b>: Inclui uma pasta com o código em python que utiliza a biblioteca paho-mqtt para se conectar ao broker MQTT, assinar o tópico (farmTechSolutions) e processar mensagens JSON recebidas. Assim testando o envio e recebimento dos dados dos sensores.
 
-- <b>src</b>: Todo o código fonte criado para o desenvolvimento do projeto ao longo das 7 fases.
+- <b>gitIgnore</b>: Arquivo para especificar quais arquivos ou diretórios devem ser ignorados pelo controle de versão dos projetos git.
 
-- <b>README.md</b>: arquivo que serve como guia e explicação geral sobre o projeto (o mesmo que você está lendo agora).
+- <b>link_simulador.txt</b>: Arquivo txt que contém o link do simulador Wokwi que redireciona para o projeto esp32 onde contem o código C++ e o circuito eletrônico proposto.
+
+- <b>README.md</b>: Documento de apresentação do projeto no GitHub, explicando suas funcionalidades em formato Markdown.
 
 ## Arquivos Importantes
 
 - **Circuito Eletrônico**: Diagrama eletrônico do sistema.
-  - [circuito_eletronico.png](document/diagramas/circuito_eletronico.png)
+  - [circuito_eletronico.png](public/circuito_eletronico_v2.0.png)
 
 - **Projeto Wokwi**: Link para o projeto no Wokwi.
-  - [projeto_wokwi.md](document/diagramas/projeto_wokwi.md)
+  - [projeto_wokwi.md](docs/link_simulador.txt)
   
 - **Código Arduino**: Código desenvolvido para o ESP32.
-  - [sketch.ino](src/WOKWI/sketch.ino)
+  - [sketch.ino](/src//sketch/sketch.ino)
   
 - **Diagrama do Wokwi**: Diagrama das peças no Wokwi.
-  - [diagram.json](src/WOKWI/diagram.json)
-  
-- **Código Python (CRUD)**: Código responsável por alimentar o banco SQL.
-  - [CRUD.py](src/Python/CRUD.py)
-  
-- **Link para o Video no YouTube**: Link para o vídeo
-	- [link_para_o_video.txt](document/youtube/link_para_o_video.txt)
+  - [diagram.json](src/diagram.json)
   
 ## 📺 **Link para o vídeo no YouTube**
 
-- [Assistir ao vídeo do projeto no YouTube](https://www.youtube.com/watch?v=bDgtLsDA9ik)
-
+- [Assistir ao vídeo do projeto no YouTube](https://)
 
 ## 🔧 Como executar o código
-
-### Ferramentas Necessárias
-
-1. **IDE Arduino**: Para compilar e carregar o código para o microcontrolador ESP32.
-   - **Versão recomendada**: 1.8.x ou superior.
-   - **Bibliotecas**: 
-     - `DHT.h` para o sensor DHT22.
-     - `WiFi.h` para conectividade com a rede Wi-Fi.
-  
-2. **Python**:
-   - **Versão recomendada**: 3.6 ou superior.
-   - **Bibliotecas**:
-     - `cx_Oracle` para conectar ao banco de dados Oracle.
-     - `datetime` para manipulação de data e hora.
-     - `os` para manipulação do sistema operacional.
-  
-3. **Banco de Dados Oracle** (Local ou Nuvem):
-   - Deve estar configurado com as tabelas adequadas para armazenar os dados dos sensores e do sistema de irrigação.
-
-### Passo a Passo para Rodar o Projeto
-
-#### 1. Configuração do Banco de Dados
-
-- **Criar as Tabelas**: O banco de dados deve ter uma estrutura que armazene as leituras dos sensores e os eventos de irrigação. Exemplo de tabela:
-
-```sql
-CREATE TABLE sensor_data (
-  id NUMBER PRIMARY KEY,
-  humidity NUMBER,
-  ph_value NUMBER,
-  phosphorus BOOLEAN,
-  potassium BOOLEAN,
-  irrigation_status BOOLEAN,
-  timestamp TIMESTAMP
-);
-```
-#### 2.Carregar o Código para o ESP32
-- Abra o arquivo src/WOKWI/sketch.ino na IDE Arduino.
-- Conecte o ESP32 ao seu computador.
-- Selecione a placa ESP32 e a porta correta na IDE.
-- Carregue o código no ESP32.
-
-#### 3. Executar o Código Python
-- Instale as dependências necessárias para conectar ao banco de dados Oracle:
-```bash
-pip install cx_Oracle
-```
-- Configure as credenciais do banco de dados Oracle no código Python.
-- Execute o arquivo **src/Python/CRUD.py** para que os dados sejam inseridos no banco de dados a partir das leituras simuladas dos sensores.
-
-#### 4. Testar o Sistema
-
-- Acompanhe as leituras no Monitor Serial da IDE Arduino.
-- Observe a ativação/desativação da bomba de irrigação com base nas condições dos sensores.
-- Verifique a inserção dos dados no banco de dados via script Python.
-
 
 ## 🗃 Histórico de lançamentos
 
 * 1.0.0 - 12/11/2024
-
+* 2.0.0 - 06/12/2024
 
 ## 📋 Licença
 
