@@ -9,7 +9,7 @@ def gerar_dados_aleatorios(qtd: int, ano: int):
         humidade = random.randint(40, 70)  # Umidade entre 40% e 70% 
         ph = round(random.uniform(5.5, 7.0), 1)  # pH entre 5.5 e 7.0
         fosforo = random.randint(0, 1)
-        potassio = random.randint(0, 2)
+        potassio = random.randint(0, 1)
 
         dia_do_ano = random.randint(1, 365)
         data = datetime(ano, 1, 1) + timedelta(days=dia_do_ano - 1)
