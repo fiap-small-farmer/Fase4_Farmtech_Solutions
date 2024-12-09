@@ -1,15 +1,16 @@
 # encoding: utf8
 
-from pathlib import Path
 from queue import Queue
 from paho.mqtt import client as mqtt
 import datetime, duckdb, json, time
 
 
+# Classe criada para captura de mensagens do broker e atualização de banco
 class FarmTechSensorData:
 
     # Metodo padrão de instancia
-    def __init__(self, broker = 'broker.mqtt-dashboard.com', topic = 'farmTechSolutions', port= 1883):
+    def __init__(self, database, broker, topic, port= 1883):
+        self.database = database
         self.connection = None
         self.broker = broker
         self.topic = topic
@@ -20,21 +21,7 @@ class FarmTechSensorData:
 
     # Realiza conexão com banco de dados
     def get_db_connection(self):
-        # Cria dirtorio para o database
-        root_dir = Path.cwd().parent
-        data_dir = root_dir / 'data'
-        data_file = data_dir / 'farmtech.db'
-
-        try:
-            assert data_file.exists() == True, \
-                'Database nao existe ou não foi encontrado'
-            connection = duckdb.connect(data_file)
-        except Exception as exc:
-            print(str(exc))
-            raise
-        else:
-            # Define conexao de referencia
-            self.connection = connection
+        self.connection = duckdb.connect(self.database)
 
 
     # Callback executado quando o cliente se conecta ao broker
@@ -82,6 +69,7 @@ class FarmTechSensorData:
                 'ic_irrigacao': message.get('irrigacao')
             }
 
+            # criação de tabela destino, caso nao exista
             self.connection.execute(
                 """
                 create table if not exists t_sensor_historic
@@ -100,7 +88,8 @@ class FarmTechSensorData:
                 """
             )
 
-            sensor_query = \
+            # Inclusão de mensagem no banco
+            self.connection.execute(
                 """
                 insert into t_sensor_historic
                 (
@@ -116,14 +105,11 @@ class FarmTechSensorData:
                     ic_irrigacao
                 )
                 values
+                    (?,?,?,?,?,?,?,?,?,?)
+                on
+                    conflict do nothing
+                """,
                 (
-                    ?,?,?,?,?,?,?,?,?,?
-                )
-                on conflict do nothing
-                """
-
-            self.connection.execute(
-                sensor_query, (
                     sensor_data.get('id_sensor'),
                     sensor_data.get('id_tempo'),
                     sensor_data.get('dh_sensor'),
@@ -161,8 +147,11 @@ class FarmTechSensorData:
 
     # Recupera mensagem enviada para o tópico do broker
     def get_messages(self):
-        while True:
-            yield self.messages.get(block= True)
+        try:
+            while True:
+                _ = self.messages.get(block= False)
+        except:
+            pass
 
 
     # Métodos para inicializar o context manager

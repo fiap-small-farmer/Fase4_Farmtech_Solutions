@@ -1,16 +1,16 @@
 # encoding: utf8
 
-from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-import datetime, duckdb, requests, pyarrow, time, os, random
+import datetime, duckdb, requests, pyarrow, time, random
 
 
 # Classe criada para captura de historico de dados, armazenamento em banco e previsão de indicadores
 class FarmTechMeteoData:
 
-    def __init__(self):
+    def __init__(self, database):
+        self.database = database
         self.connection = None
         self.scaler = StandardScaler()
         self.model = None
@@ -22,22 +22,7 @@ class FarmTechMeteoData:
 
     # Realiza conexão com banco de dados
     def get_db_connection(self):
-
-        # Cria dirtorio para o database
-        root_dir = Path.cwd().parent
-        data_dir = root_dir / 'data'
-        data_file = data_dir / 'farmtech.db'
-
-        try:
-            if not data_dir.exists():
-                _ = data_dir.mkdir(parents=True)
-            connection = duckdb.connect(data_file)
-        except Exception as exc:
-            print(str(exc))
-            raise
-        else:
-            # Define conexao de referencia
-            self.connection = connection
+        self.connection = duckdb.connect(self.database)
 
 
     def exe_model_training(self, dataframe):

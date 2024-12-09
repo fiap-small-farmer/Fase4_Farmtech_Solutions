@@ -1,0 +1,7 @@
+requests
+paho-mqtt
+pandas
+pyarrow
+duckdb
+scikit-learn
+streamlit
