@@ -2,7 +2,7 @@
 
 from pathlib import Path
 from utils import meteo as m, sensor as s
-import duckdb, streamlit as st, time
+import datetime, duckdb, numpy, streamlit as st, time
 
 
 # Page config | fav icon e layout base
@@ -77,7 +77,7 @@ def main():
                 where
                     cast(dt_sensor as date)
                 =
-                    cast(current_date as date)
+                    cast(current_date - INTERVAL 3 HOUR as date)
             )
             select distinct
                 x.data,
@@ -111,7 +111,7 @@ def main():
             where
                 cast(dt_sensor as date)
             =
-                cast(current_date as date)
+                cast(current_date - INTERVAL 3 HOUR as date)
             """
         )\
         .fetchnumpy()
@@ -125,7 +125,7 @@ def main():
             where
                 cast(dt_sensor as date)
             =
-                cast(current_date as date)
+                cast(current_date - INTERVAL 3 HOUR as date)
             """
         ).fetchnumpy()
 
@@ -139,7 +139,7 @@ def main():
             where
                 cast(dt_indicador as date)
             =
-                cast(current_date as date)
+                cast(current_date - INTERVAL 3 HOUR as date)
             """
         ).fetchnumpy()
 
@@ -185,14 +185,12 @@ def main():
     meteo = m.FarmTechMeteoData(database= DATABASE)
 
     # Recupera dataset meterologico com previsoes realizadas
+    _ = meteo.exe_refresh_meteo_data()
     _ = meteo.get_meteo_prediction_data()
 
     # Abre conexão com broker para recebimento de dados
     with s.FarmTechSensorData(database= DATABASE, broker= BROKER, topic= TOPIC) \
         as session:
-
-        # Contador de eventos. Utilizado para renovar base de previsao
-        counter = 0
 
         while True:
             # Recupera novas mensagens no broker
@@ -200,21 +198,17 @@ def main():
 
             with duckdb.connect(database= DATABASE) as connection:
 
-                kpis = get_kpi(connection= connection)
-
-                # Controla renovação de base de previsões para nao interferir no desempenho geral
-                if counter == 100:
-                    _ = meteo.exe_refresh_meteo_data()
-                    counter = 0
-                else:
-                    counter += 1
-
                 ###### Geração de indicadores
 
-                df_sensor_ultimos_indicadores = kpis[0]
-                qt_avaliacaoes_realizadas_hoje = kpis[1]
-                qt_irrigacoes_realizadas_hoje = kpis[2]
-                qt_irrigacoes_previstas_hoje = kpis[3]
+                kpis = get_kpi(connection= connection)
+
+                df_sensor_ultimos_indicadores = kpis[0].get('data').item(0) if len(kpis[0].get('data')) > 0 else \
+                    (datetime.datetime.now(tz= datetime.timezone.utc) - datetime.timedelta(hours= 3)).date().isoformat()
+                qt_avaliacaoes_realizadas_hoje = kpis[1].get('qt_evento').item(0) if len(kpis[1].get('qt_evento')) > 0 else numpy.int32(0)
+                qt_irrigacoes_realizadas_hoje = kpis[2].get('qt_evento').item(0) if len(kpis[2].get('qt_evento')) > 0 else numpy.int32(0)
+                qt_irrigacoes_previstas_hoje = kpis[3].get('qt_evento').item(0) if len(kpis[3].get('qt_evento')) > 0 else numpy.int32(0)
+
+                df_sensor_ultimos_indicadores_0d = kpis[0]
                 df_sensor_proximos_indicadores_7d = kpis[4]
 
                 # Indicadores streamlit
@@ -222,26 +216,26 @@ def main():
                     kpi1, kpi2, kpi3, kpi4, kpi5, kpi6, kpi7, kpi8 = st.columns(8)
 
                     kpi1.metric(label="Data Referência",
-                        value= df_sensor_ultimos_indicadores['data'][0],
-                        delta= df_sensor_ultimos_indicadores['data'][0], label_visibility= 'visible')
+                        value= df_sensor_ultimos_indicadores,
+                        delta= df_sensor_ultimos_indicadores, label_visibility= 'visible')
 
                     kpi2.metric(label="Qtd. Avaliações",
-                        value= qt_avaliacaoes_realizadas_hoje['qt_evento'].item(),
-                        delta= qt_avaliacaoes_realizadas_hoje['qt_evento'].item(), label_visibility= 'visible')
+                        value= qt_avaliacaoes_realizadas_hoje,
+                        delta= qt_avaliacaoes_realizadas_hoje, label_visibility= 'visible')
                     
                     kpi3.metric(label="Qtd. Irrigações Previstas",
-                        value= qt_irrigacoes_previstas_hoje['qt_evento'].item(),
-                        delta= qt_irrigacoes_previstas_hoje['qt_evento'].item(), label_visibility= 'visible')
+                        value= qt_irrigacoes_previstas_hoje,
+                        delta= qt_irrigacoes_previstas_hoje, label_visibility= 'visible')
 
                     kpi4.metric(label="Qtd. Irrigações Realizadas",
-                        value= qt_irrigacoes_realizadas_hoje['qt_evento'].item(),
-                        delta= qt_irrigacoes_realizadas_hoje['qt_evento'].item(), label_visibility= 'visible')
+                        value= qt_irrigacoes_realizadas_hoje,
+                        delta= qt_irrigacoes_realizadas_hoje, label_visibility= 'visible')
 
                     table1, table2 = st.columns(2)
 
                     with table1:
                         st.markdown("### Avaliações Realizadas")
-                        st.dataframe(df_sensor_ultimos_indicadores, hide_index= True)
+                        st.dataframe(df_sensor_ultimos_indicadores_0d, hide_index= True)
 
                     with table2:
                         st.markdown("### Irrigações Previstas (7 Dias)")

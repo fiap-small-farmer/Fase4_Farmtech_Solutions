@@ -5,3 +5,4 @@ pyarrow
 duckdb
 scikit-learn
 streamlit
+numpy

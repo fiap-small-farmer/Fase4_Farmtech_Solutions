@@ -69,25 +69,6 @@ class FarmTechSensorData:
                 'ic_irrigacao': message.get('irrigacao')
             }
 
-            # criação de tabela destino, caso nao exista
-            self.connection.execute(
-                """
-                create table if not exists t_sensor_historic
-                (
-                    id_sensor integer PRIMARY KEY,
-                    id_tempo integer,
-                    dh_sensor timestamp,
-                    dt_sensor date,
-                    hr_sensor time,
-                    nr_umidade_ar double,
-                    nr_ph_solo double,
-                    ic_fosforo integer,
-                    ic_potassio integer,
-                    ic_irrigacao integer
-                )
-                """
-            )
-
             # Inclusão de mensagem no banco
             self.connection.execute(
                 """
@@ -158,6 +139,30 @@ class FarmTechSensorData:
     def __enter__(self):
         if not self.client:
             self.get_session()
+
+        # Estabelece conexão com database
+        if not self.connection:
+            self.get_db_connection()
+
+        # criação de tabela destino, caso nao exista
+        self.connection.execute(
+            """
+            create table if not exists t_sensor_historic
+            (
+                id_sensor integer PRIMARY KEY,
+                id_tempo integer,
+                dh_sensor timestamp,
+                dt_sensor date,
+                hr_sensor time,
+                nr_umidade_ar double,
+                nr_ph_solo double,
+                ic_fosforo integer,
+                ic_potassio integer,
+                ic_irrigacao integer
+            )
+            """
+        )
+
         return self
 
 
